@@ -37,7 +37,7 @@ namespace mailCleaner.Helper
             
             var results = messageType switch
             {
-                0 => inbox.Search(SearchOptions.All, SearchQuery.Seen),
+                0 => inbox.Search(SearchOptions.All, SearchQuery.Unseen),
                 1 => inbox.Search(SearchOptions.All, SearchQuery.Seen),
                 _ => inbox.Search(SearchOptions.All, SearchQuery.All)
             };
