@@ -22,7 +22,7 @@ namespace mailCleaner.Helper
             this.password = password;
         }
 
-        public void GetReadMails()
+        public void GetReadMails(int messageType)
         {
             var messages = new List<string>();
 
@@ -34,8 +34,15 @@ namespace mailCleaner.Helper
 
             var inbox = client.Inbox;
             inbox.Open(FolderAccess.ReadWrite);
-            var results = inbox.Search(SearchOptions.All, SearchQuery.Seen);
-            messages.AddRange(results.UniqueIds.Select(uniqueId => inbox.GetMessage(uniqueId)).Select(message => message.HtmlBody));
+            
+            var results = messageType switch
+            {
+                0 => inbox.Search(SearchOptions.All, SearchQuery.Seen),
+                1 => inbox.Search(SearchOptions.All, SearchQuery.Seen),
+                _ => inbox.Search(SearchOptions.All, SearchQuery.All)
+            };
+
+            messages.AddRange(results?.UniqueIds.Select(uniqueId => inbox.GetMessage(uniqueId)).Select(message => message.HtmlBody));
 
             DeleteMails(inbox, client);
         }
